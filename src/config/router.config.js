@@ -267,6 +267,42 @@ export const asyncRouterMap = [
             ]
           }
         ]
+      },
+      // {
+      //   path: '/demo',
+      //   component: RouteView,
+      //   redirect: '/demo/demo1',
+      //   name: 'demo',
+      //   meta: { title: 'demo', icon: 'user', keepAlive: true, permission: ['user'] },
+      //   children: [
+      //     {
+      //       path: '/demo/demo1',
+      //       name: 'demo1',
+      //       component: () => import(/* webpackChunkName: "fail" */ '@/views/demo/demo1'),
+      //       meta: { title: 'demo1', icon: 'user', hidden: true, keepAlive: true }
+      //     },
+      //     {
+      //       path: '/demo/demo2',
+      //       name: 'demo2',
+      //       component: () => import(/* webpackChunkName: "fail" */ '@/views/demo/demo2'),
+      //       meta: { title: 'demo2', icon: 'user', hidden: true, keepAlive: true }
+      //     }
+      //   ]
+      // },
+
+      // // 我的图片
+      // {
+      //   path: '/demo/demo1',
+      //   name: 'demo1',
+      //   component: () => import(/* webpackChunkName: "fail" */ '@/views/demo/demo1'),
+      //   meta: { title: '我的图片', icon: 'picture', hidden: true, keepAlive: true }
+      // },
+      // 我的相册
+      {
+        path: '/albums',
+        name: 'AlbumList',
+        component: () => import(/* webpackChunkName: "fail" */ '@/views/albums/AlbumList'),
+        meta: { title: '我的相册', icon: 'picture', hidden: true, keepAlive: true }
       }
 
       // other

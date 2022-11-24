@@ -121,6 +121,12 @@ export default {
     this.needTotalList = this.initTotalList(this.columns)
     this.loadData()
   },
+  updated () {
+    var ls = document.getElementsByClassName('ant-table-body')
+    for (let i = 0; i < ls.length; i++) {
+      ls[i].style.height = ls[i].style.maxHeight
+    }
+  },
   methods: {
     /**
      * 表格重新加载方法

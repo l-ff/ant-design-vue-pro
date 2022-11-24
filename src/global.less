@@ -31,25 +31,26 @@ ol {
   list-style: none;
 }
 
-// 数据列表 样式
+/* 数据列表 样式 */
 .table-alert {
   margin-bottom: 16px;
 }
-// 数据列表 操作
-.table-operator {
-  margin-bottom: 18px;
 
-  button {
-    margin-right: 8px;
-  }
+/* 数据列表 操作 */
+.table-operator {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 8px;
 }
-// 数据列表 搜索条件
+
+/* 数据列表 搜索条件 */
 .table-page-search-wrapper {
   .ant-form-inline {
     .ant-form-item {
       display: flex;
       margin-right: 0;
-      margin-bottom: 24px;
+      margin-bottom: 15px;
 
       .ant-form-item-control-wrapper {
         flex: 1 1;
@@ -71,10 +72,21 @@ ol {
   }
 
   .table-page-search-submitButtons {
-    display: block;
-    margin-bottom: 24px;
+    line-height: 32px;
     white-space: nowrap;
   }
+}
+
+.ant-table-small > .ant-table-content .ant-table-header {
+  background-color: #fafafa;
+}
+
+.ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-header > table {
+  border-bottom: .1px solid #e8e8e8;
+}
+
+.ant-layout-footer {
+  display: none;
 }
 
 @media (max-width: @screen-xs) {
