@@ -12,7 +12,7 @@
               :indeterminate="selected.length !== 0 && selected.length !== dataSource.length"
               :checked="selected.length !== 0 && selected.length === dataSource.length"
               @change="onCheckAllChange">
-              {{ selected.length }}/{{ dataSource.length }}
+              选择：{{ selected.length }}/{{ dataSource.length }}
             </a-checkbox>
           </span>
 
@@ -160,14 +160,7 @@ export default {
 <style lang="less" scoped>
 @import "~@/components/index.less";
 .card-list {
-  margin-top: -10px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: calc(100vh - 124px);
-
-  :deep(.ant-row) {
-    margin: 0 -5px !important;
-}
+    margin-bottom: 15px;
 
 :deep(.ant-col) {
   padding: 6px !important;
@@ -194,7 +187,7 @@ export default {
     position: absolute;
     pointer-events: none;
     display:block;
-    z-index: 999;
+    z-index: 1;
     opacity: 0;
     color: #fff;
   }
@@ -244,12 +237,6 @@ export default {
 
     margin-bottom: 1em;
   }
-}
-
-.card-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 48px;
 }
 
 .ant-card-actions {

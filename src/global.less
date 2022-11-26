@@ -16,6 +16,32 @@ body,
   min-height: 100vh;
 }
 
+.ant-pro-page-header-wrap {
+  height: calc(100vh - 64px);
+  margin: -15px !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .ant-pro-page-header-wrap-page-header-warp {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 8%);
+  }
+
+  .ant-page-header-content {
+    padding: 0;
+  }
+
+  .ant-pro-grid-content {
+    margin-top: -5px;
+  }
+}
+
+.ant-page-header.ant-page-header-ghost {
+  padding: 5px 20px;
+}
+
 canvas {
   display: block;
 }
