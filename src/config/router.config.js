@@ -290,13 +290,13 @@ export const asyncRouterMap = [
       //   ]
       // },
 
-      // // 我的图片
-      // {
-      //   path: '/demo/demo1',
-      //   name: 'demo1',
-      //   component: () => import(/* webpackChunkName: "fail" */ '@/views/demo/demo1'),
-      //   meta: { title: '我的图片', icon: 'picture', hidden: true, keepAlive: true }
-      // },
+      // 我的图片
+      {
+        path: '/images',
+        name: 'Images',
+        component: () => import(/* webpackChunkName: "fail" */ '@/views/images'),
+        meta: { title: '我的图片', icon: 'picture', hidden: true, keepAlive: true }
+      },
       // 我的相册
       {
         path: '/albums',
