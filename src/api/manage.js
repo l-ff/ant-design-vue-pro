@@ -6,7 +6,8 @@ const api = {
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  image: '/images'
 }
 
 export default api
@@ -66,5 +67,13 @@ export function saveSub (sub) {
     url: '/sub',
     method: sub.id === 0 ? 'post' : 'put',
     data: sub
+  })
+}
+
+export function getImages (parameter) {
+  return request({
+    url: api.image,
+    method: 'get',
+    params: parameter
   })
 }

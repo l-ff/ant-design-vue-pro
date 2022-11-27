@@ -9,6 +9,7 @@ import store from './store/'
 import i18n from './locales'
 import Viewer from 'v-viewer' // 预览图片
 import VueLazyload from 'vue-lazyload' // 图片懒加载
+import VueTimeago from 'vue-timeago' // 时间格式化
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
@@ -29,13 +30,9 @@ Vue.config.productionTip = false
 // mount axios to `Vue.$http` and `this.$http`
 Vue.use(VueAxios)
 Vue.use(Viewer) // 预览图片
-Vue.use(VueLazyload, {
-  preLoad: 1.3,
-  error: require('./assets/error.gif'),
-  loading: require('./assets/loading.gif'),
-  attempt: 1
-})
-
+Viewer.setDefaults({ url: 'data-source' })
+Vue.use(VueLazyload, { preLoad: 1.3, error: require('./assets/error.gif'), loading: require('./assets/loading.gif'), attempt: 1 })
+Vue.use(VueTimeago, { name: 'Timeago', locale: 'zh-CN', locales: { 'zh-CN': require('date-fns/locale/zh_cn'), ja: require('date-fns/locale/ja') } })// component name, `timeago` by default
 // use pro-layout components
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-container', PageHeaderWrapper)
