@@ -22,7 +22,6 @@
       <a-button type="text" :disabled="isLoading" v-show="isEdit"><a-icon type="plus" />&nbsp;添加到相册</a-button>
       <a-button type="text" :disabled="isLoading" v-show="isEdit"><a-icon type="lock" />&nbsp;设置权限</a-button>
       <a-button type="text" :disabled="isLoading" v-show="isEdit"><a-icon type="share-alt" />&nbsp;分享</a-button>
-      <a-button type="text" :disabled="isLoading" v-show="isEdit"><a-icon type="edit" />&nbsp;重命名</a-button>
       <a-button type="text" :disabled="isLoading" v-show="isEdit"><a-icon type="delete" />&nbsp;删除</a-button>
       <!-- <a-dropdown v-show="isEdit" :trigger="['click']">
         <a-button type="text" class="ant-dropdown-link">更多操作<a-icon type="down" /></a-button>
@@ -51,18 +50,10 @@
       <a-dropdown :disabled="isLoading">
         <a-button type="text" class="ant-dropdown-link">排序<a-icon type="sort-descending" /></a-button>
         <a-menu slot="overlay">
-          <a-menu-item>
-            <a href="javascript:;">最新上传</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="javascript:;">最早上传</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="javascript:;">赞最多</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="javascript:;">赞最少</a>
-          </a-menu-item>
+          <a-menu-item>最新上传</a-menu-item>
+          <a-menu-item>最早上传</a-menu-item>
+          <a-menu-item>赞最多</a-menu-item>
+          <a-menu-item>赞最少</a-menu-item>
         </a-menu>
       </a-dropdown>
       &nbsp;
@@ -106,21 +97,23 @@
                       <a-icon key="edit" type="edit" theme="twoTone" two-tone-color="#6e4d40" />
                     </a-tooltip>
                   </a-popover>
-                  <a-tooltip placement="bottom">
+                  <a-tooltip placement="bottom" @click="imgInfo.visible=true">
                     <template slot="title">查看图片信息</template>
                     <a-icon type="info-circle" theme="twoTone" two-tone-color="#7991d1" />
                   </a-tooltip>
-                  <a-tooltip placement="bottom" v-if="item.isLock">
+                  <a-tooltip placement="bottom" v-if="item.isLock" @click="item.isLock=false">
                     <template slot="title">私有的</template>
                     <a-icon type="lock" theme="twoTone" two-tone-color="#00b483" />
                   </a-tooltip>
-                  <a-tooltip placement="bottom" v-if="!item.isLock">
+                  <a-tooltip placement="bottom" v-if="!item.isLock" @click="item.isLock=true">
                     <template slot="title">公开的</template>
                     <a-icon type="unlock" theme="twoTone" two-tone-color="#f0c649" />
                   </a-tooltip>
                   <a-tooltip placement="bottom">
                     <template slot="title">删除</template>
-                    <a-icon type="delete" theme="twoTone" two-tone-color="#c56978" />
+                    <a-popconfirm title="确定要删除此项吗?" @confirm="$message.success('Click on Yes');">
+                      <a-icon type="delete" theme="twoTone" two-tone-color="#c56978" />
+                    </a-popconfirm>
                   </a-tooltip>
                 </template>
               </a-card>
@@ -134,6 +127,29 @@
         </a-list>
       </a-spin>
     </viewer>
+    <a-drawer
+      placement="right"
+      :visible="imgInfo.visible"
+      :maskClosable="true"
+      :width="420"
+      @close="imgInfo.visible=false"
+    >
+      <template #title>
+        <span><a-icon type="info-circle" theme="twoTone" two-tone-color="#7991d1" /> 图片信息</span>
+      </template>
+      <a-descriptions :column="1" layout="vertical">
+        <a-descriptions-item label="相册名称">-</a-descriptions-item>
+        <a-descriptions-item label="图片名称">a.png</a-descriptions-item>
+        <a-descriptions-item label="图片大小">122.88 Bytes</a-descriptions-item>
+        <a-descriptions-item label="图片类型">image/png</a-descriptions-item>
+        <a-descriptions-item label="尺寸">1920 * 1080</a-descriptions-item>
+        <a-descriptions-item label="MD5">cb96165dffe7d1bba338c1c0c99a8b6d</a-descriptions-item>
+        <a-descriptions-item label="SHA-128">93e71f3cf06f2b2dfb3220e21ae35c9b4c1d4647</a-descriptions-item>
+        <a-descriptions-item label="权限">私有</a-descriptions-item>
+        <a-descriptions-item label="上传IP">172.69.34.26</a-descriptions-item>
+        <a-descriptions-item label="上传时间">2022-11-17 22:33:49</a-descriptions-item>
+      </a-descriptions>
+    </a-drawer>
   </page-header-wrapper>
 </template>
 
@@ -149,6 +165,9 @@ export default {
         viewMode: 0,
         pageSize: 20,
         pageIndex: 0
+      },
+      imgInfo: {
+        visible: false
       },
       isLoading: false,
       isEdit: false,
