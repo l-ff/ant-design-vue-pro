@@ -244,7 +244,7 @@ export default {
 <style lang="less" scoped>
 @import '~@/components/index.less';
 .card-list {
-  margin-bottom: 15px;
+  margin: -6px 5px;
 
   :deep(.ant-col) {
     padding: 6px !important;
@@ -287,7 +287,6 @@ export default {
   }
 
   :deep(.ant-card-body) {
-    padding: 0;
     .ant-checkbox-wrapper {
       position: absolute;
       top: 10px;
@@ -308,10 +307,6 @@ export default {
     .ant-card-meta-title > a {
       color: @primary-color;
     }
-  }
-
-  :deep(.ant-card-meta-detail) {
-    margin: 10px 5px;
   }
 }
 

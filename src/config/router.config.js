@@ -301,8 +301,15 @@ export const asyncRouterMap = [
       {
         path: '/albums',
         name: 'AlbumList',
-        component: () => import(/* webpackChunkName: "fail" */ '@/views/albums/AlbumList'),
+        component: () => import(/* webpackChunkName: "fail" */ '@/views/albums'),
         meta: { title: '我的相册', icon: 'picture', hidden: true, keepAlive: true }
+      },
+      // 我的相册1
+      {
+        path: '/albums1',
+        name: 'AlbumList1',
+        component: () => import(/* webpackChunkName: "fail" */ '@/views/albums1/AlbumList'),
+        meta: { title: '我的相册1', icon: 'picture', hidden: true, keepAlive: true }
       }
 
       // other
