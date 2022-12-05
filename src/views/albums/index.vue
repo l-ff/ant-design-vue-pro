@@ -11,22 +11,32 @@
             <a-button size="small"><a-icon type="down" /></a-button>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a @click="albumModal_open(2, { id: item.id, name: item.name })"><a-icon type="edit" /> 编辑相册</a>
+                <a @click="albumModal_open(2, item)"><a-icon type="edit" /> 编辑相册</a>
               </a-menu-item>
               <a-menu-item>
                 <a><a-icon type="lock" /> 设置权限</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="ablbum_delete(item.id, item.name)"><a-icon type="delete" /> 删除相册</a>
+                <a @click="ablbum_delete(item)"><a-icon type="delete" /> 删除相册</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-          <img slot="cover" :alt="item.name" :src="item.src" :key="item.id" />
+          <img slot="cover" :alt="item.name" :src="item.cover_url" :key="item.id" />
           <div class="img-info" style="display: flex">
-            <span style="flex: 1 1"><a-icon type="lock" /></span>
-            <span style="flex: 0 1 auto"><a-icon type="picture" /> {{ item.count }}</span>
+            <a-space style="flex: 1 1">
+              <span><a-icon type="picture" /> {{ item.image_count }}</span>
+            </a-space>
+            <a-space style="flex: 0 1 auto">
+              <span><a-icon type="eye" /> {{ item.view_count }}</span>
+              <span><a-icon type="like" /> {{ item.like_count }}</span>
+            </a-space>
           </div>
-          <a-card-meta :title="item.name" />
+          <a-card-meta>
+            <div slot="title" style="display: flex">
+              <ellipsis :length="28" tooltip style="flex: 1 1">{{ item.name }}</ellipsis>
+              <span style="flex: 0 1 auto"><a-icon :type="item.permission ? 'lock' : 'unlock'" /></span>
+            </div>
+          </a-card-meta>
         </a-card>
       </a-list-item>
     </a-list>
@@ -37,15 +47,21 @@
       :model="model"
       :entity="entity"
       @cancel="albumModal_cancel"
-      @ok="albumModal_ok" />
+      @ok="albumModal_ok"
+    />
   </page-header-wrapper>
 </template>
 
 <script>
+import Ellipsis from '@/components/Ellipsis'
 import AlbumForm from './modules/AlbumForm'
+
+import { getAlbums, getAlbum, delAlbum } from '@/api/album'
+
 export default {
   components: {
-    AlbumForm
+    AlbumForm,
+    Ellipsis
   },
   data () {
     return {
@@ -53,75 +69,12 @@ export default {
       confirmLoading: false,
       model: 0,
       entity: null,
-      dataSource: [
-        {
-          id: 1,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册001',
-          count: 50,
-          lock: false
-        },
-        {
-          id: 2,
-          src: 'https://tva3.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh49nzpwj31hc0u0amq.jpg',
-          name: '我的相册002',
-          count: 522,
-          lock: false
-        },
-        {
-          id: 3,
-          src: 'https://tva1.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4atmd2j31hc0u0too.jpg',
-          name: '我的相册003',
-          count: 51,
-          lock: false
-        },
-        {
-          id: 4,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册004',
-          count: 1230,
-          lock: !false
-        },
-        {
-          id: 5,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册005',
-          count: 346,
-          lock: false
-        },
-        {
-          id: 6,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册006',
-          count: 364,
-          lock: false
-        },
-        {
-          id: 7,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册007',
-          count: 631,
-          lock: !false
-        },
-        {
-          id: 8,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册008',
-          count: 1364,
-          lock: false
-        },
-        {
-          id: 9,
-          src: 'https://tva2.sinaimg.cn/bmiddle/005Q9Qt9ly1gzrh4e2mf8j30zk0k0n4e.jpg',
-          name: '我的相册009',
-          count: 23745,
-          lock: !false
-        }
-      ]
+      dataSource: []
     }
   },
   methods: {
     albumModal_open (model, entity) {
+      this.entity = {}
       this.entity = entity
       this.model = model
       this.visible = true
@@ -139,12 +92,11 @@ export default {
               setTimeout(() => {
                 resolve()
               }, 1000)
-            }).then(res => {
+            }).then((res) => {
               this.visible = false
               this.confirmLoading = false
               // 重置表单数据
               form.resetFields()
-
               this.$message.info('修改成功')
             })
           } else {
@@ -153,19 +105,16 @@ export default {
               setTimeout(() => {
                 resolve()
               }, 1000)
-            }).then(res => {
+            }).then((res) => {
               this.visible = false
               this.confirmLoading = false
               // 重置表单数据
               form.resetFields()
-
               this.$message.info('新增成功')
             })
           }
         } else {
           this.confirmLoading = false
-
-          const form = this.$refs.albumModal.form
           form.resetFields() // 清理表单数据（可不做）
         }
       })
@@ -173,45 +122,90 @@ export default {
     albumModal_cancel () {
       this.visible = false
     },
-    ablbum_delete (id, name) {
+    ablbum_delete (album) {
       var me = this
       me.$confirm({
         title: '您确定要删除此项吗?',
-        content: (h) => <div style="color:red;">{name}</div>,
+        content: () => <div style="color:red;">{album.name}</div>,
         onOk () {
-          console.log('OK', id)
-          me.$message.success('删除成功！')
+          // console.log('OK', album.id, album.name)
+          delAlbum(album.id).then(res => {
+            if (res.message === 'ok') {
+                me.$message.success('删除成功！')
+                me.dataSource.splice(me.dataSource.indexOf(album), 1)
+              } else {
+                me.$error.success('删除失败！')
+              }
+          })
         },
         onCancel () {
           console.log('Cancel')
         }
       })
+    },
+    loadData () {
+      const me = this
+      getAlbum({ id: 1 }).then((res) => {
+        // console.log('album1', res.result)
+      })
+      getAlbums().then((res) => {
+        console.log('albums', res)
+        me.dataSource = res.result
+      })
     }
+  },
+  mounted () {
+    this.loadData()
   }
 }
 </script>
 
 <style lang="less" scoped>
 .ant-card {
+  :deep(.ant-card-cover) {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    height: 160px;
+    overflow: hidden;
+  }
   .card-actions {
     position: absolute;
     right: 10px;
     top: 10px;
-    color: #0002;
-    border: 1px solid #0002 !important;
-    background-color: #fff1 !important;
-    backdrop-filter: blur(0.35rem);
+    display: none;
   }
 
   .img-info {
     position: absolute;
+    pointer-events: n;
     left: 0;
     bottom: 36px;
-    padding: 2px 10px;
+    padding: 30px 10px 2px;
     width: 100%;
     color: #fff;
-    background-color: #0001;
-    backdrop-filter: blur(0.35rem);
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.00386607) 8.07%,
+      rgba(0, 0, 0, 0.0152486) 15.54%,
+      rgba(0, 0, 0, 0.033824) 22.5%,
+      rgba(0, 0, 0, 0.0592687) 29.04%,
+      rgba(0, 0, 0, 0.0912593) 35.26%,
+      rgba(0, 0, 0, 0.129472) 41.25%,
+      rgba(0, 0, 0, 0.173583) 47.1%,
+      rgba(0, 0, 0, 0.22327) 52.9%,
+      rgba(0, 0, 0, 0.278208) 58.75%,
+      rgba(0, 0, 0, 0.338074) 64.74%,
+      rgba(0, 0, 0, 0.402545) 70.96%,
+      rgba(0, 0, 0, 0.471296) 77.5%,
+      rgba(0, 0, 0, 0.544005) 84.46%,
+      rgba(0, 0, 0, 0.620347) 91.93%,
+      rgba(0, 0, 0, 0.7)
+    );
   }
+}
+.ant-card:hover .card-actions {
+  display: block;
 }
 </style>

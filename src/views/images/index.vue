@@ -205,7 +205,7 @@ export default {
       var me = this
       me.isLoading = true
       getImages(me.filter).then((res) => {
-        console.log('getImages：', res)
+        console.log('getImages:', res)
         if (res.result.length > 0) {
           me.dataSource.splice(me.dataSource.length - 1, 0, ...res.result)
         } else {

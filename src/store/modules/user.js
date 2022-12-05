@@ -61,7 +61,7 @@ const user = {
               const per = {
                 ...permission,
                 actionList: (permission.actionEntitySet || {}).map(item => item.action)
-               }
+              }
               return per
             })
             role.permissionList = role.permissions.map(permission => { return permission.permissionId })

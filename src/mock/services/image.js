@@ -804,7 +804,7 @@ const imgs = [
     { pid: '005Q9Qt9ly1gzrhgi2bsgj31hc0u012p', l: 'fff1c9f15cce406aa5c92d861fbcb908.jpg', isLock: false }
 ]
 
-const article = (options) => {
+const getImg = (options) => {
     const param = getQueryParameters(options)
     console.log('queryParameters', param)
 
@@ -842,4 +842,4 @@ const article = (options) => {
     return builder(data)
 }
 
-Mock.mock(/\/api\/images/, 'get', article)
+Mock.mock(/\/api\/images/, 'get', getImg)
